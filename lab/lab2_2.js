@@ -1,5 +1,4 @@
 var AWS = require('aws-sdk');
-var ip = require("ip");
 
 AWS.config.loadFromPath('./config.json');
 
@@ -8,14 +7,14 @@ var ec2 = new AWS.EC2();
 var task =  function(request, callback){
 	
     var params = {
-        ImageId: 'ami-4983d779', /* required */
-        MaxCount: 1, 			 /* required */
-		MinCount: 1, 			 /* required */
+        ImageId: 'ami-4983d779', 
+        MaxCount: 1, 			 
+		MinCount: 1, 			 
 		DisableApiTermination: false,
 		InstanceInitiatedShutdownBehavior: 'stop',
 		InstanceType: 't1.micro',
 		Monitoring: {
-			Enabled: true  		 /* required */
+			Enabled: true  		 
 		},
 		KeyName: 'szymon.glowacki',
 		DisableApiTermination: false,
@@ -31,12 +30,10 @@ var task =  function(request, callback){
 			console.log(err, err.stack); // an error occurred
 		else {			
 			var res = {
-				IP: data.Instances[0]				
+				IP: data.Instances[0].PrivateIpAddress,
+				DNS: data.Instances[0].PrivateDnsName
 			}
-			console.log(res);
-			callback(null,"Adres IP: " + res.IP + "<br>" +
-				"DNS: " + res.IP
-			);
+			callback(null,"Adres IP: " + res.IP + "<br>" +	"DNS: " + res.DNS);
 		}
     });
 }
